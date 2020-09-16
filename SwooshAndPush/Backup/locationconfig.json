@@ -1,0 +1,18 @@
+{
+    "name": "Loren",
+    "health_minCasual": 10000.0,
+    "health_maxCasual": 15000.0,
+    "health_minBoss": 30000.0,
+    "health_maxBoss": 35000.0,
+    "health_minSuperBoss": 45000.0,
+    "health_maxSuperBoss": 50000.0,
+    "res_CasualPhysical": 0.30000001192092898,
+    "res_CasualMag": 0.30000001192092898,
+    "res_CasualPure": 0.30000001192092898,
+    "res_BossPhysical": 0.10000000149011612,
+    "res_BossMag": 0.699999988079071,
+    "res_BossPure": 0.30000001192092898,
+    "res_SuperBossPhysical": 0.30000001192092898,
+    "res_SuperBossMag": 0.30000001192092898,
+    "res_SuperBossPure": 0.30000001192092898
+}

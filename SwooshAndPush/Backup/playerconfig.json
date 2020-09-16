@@ -1,0 +1,10 @@
+{
+    "phy_minTapDmg": 90.0,
+    "phy_maxTapDmg": 150.0,
+    "luck_PhysicalCrit": 0.10000000149011612,
+    "crit_dmg": 240.0,
+    "combo_bloodOceanDmg": 500.0,
+    "combo_leftRightSlashDmg": 700.0,
+    "combo_upDownSlashDmg": 200.0,
+    "combo_clockWiseSlashDmg": 1000.0
+}
