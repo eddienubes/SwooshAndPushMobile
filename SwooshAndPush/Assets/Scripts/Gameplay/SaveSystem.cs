@@ -15,8 +15,8 @@ public static class SaveSystem
         //string pathLoc = Path.Combine(Application.persistentDataPath, "playerconfig.json");
         //string pathPlayer = Path.Combine(Application.persistentDataPath, "locationconfig.json");
 
-        string pathLoc = "D:\\CODE\\Unity\\Trash Mobile Test\\Assets\\Data\\playerconfig.json";
-        string pathPlayer = "D:\\CODE\\Unity\\Trash Mobile Test\\Assets\\Data\\locationconfig.json";
+        string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
+        string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
 
         File.WriteAllText(pathLoc, jsonPlayer);
         File.WriteAllText(pathPlayer, jsonLoc);
@@ -27,8 +27,8 @@ public static class SaveSystem
         //string pathLoc = Path.Combine(Application.persistentDataPath, "playerconfig.json");
         //string pathPlayer = Path.Combine(Application.persistentDataPath, "locationconfig.json");
 
-        string pathLoc = "D:\\CODE\\Unity\\Trash Mobile Test\\Assets\\Data\\playerconfig.json";
-        string pathPlayer = "D:\\CODE\\Unity\\Trash Mobile Test\\Assets\\Data\\locationconfig.json";
+        string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
+        string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
 
         string jsonPlayer = File.ReadAllText(pathLoc);
         string jsonLoc = File.ReadAllText(pathPlayer);

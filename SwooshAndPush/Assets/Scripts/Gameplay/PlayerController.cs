@@ -16,8 +16,9 @@ public class PlayerController : MonoBehaviour
     private bool isDraging = false;
     private Vector2 startTouch, swipeDelta;
     private float touchBounds;
+    public int playerLevel;
     public float lastActionTime = 0f, comboTime = 0.35f;
-   
+    
     // Player Action variables
     [SerializeField] private PlayerAction playerAction;
     [SerializeField] public static PlayerState playerState = PlayerState.Idle;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         locationManager = GameObject.Find("Location Manager").GetComponent<LocationManager>();
         touchBounds = (float)(Screen.height * 0.15); // 0.15 - 300 pixels of standart 1080 x 1920 mobile screen size
         SaveSystem.LoadPlayer(out locationManager.currentLocation, out playerStats);
+        playerLevel = playerStats.playerLevel;
     }
 
     private void Update()

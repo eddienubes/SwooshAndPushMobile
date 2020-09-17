@@ -89,6 +89,8 @@ public enum StageType
     public float goldCoins;
     public int diamonds;
 
+    public int playerLevel;
+
     public PlayerStats()
     {
         

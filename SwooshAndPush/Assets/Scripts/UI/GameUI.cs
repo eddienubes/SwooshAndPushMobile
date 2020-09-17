@@ -7,8 +7,7 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] private GameObject[] panels;
     [SerializeField] private Button[] buttons;
-    [SerializeField] private Text goldAmount;
-    [SerializeField] private Text diamondAmount;
+    
     [SerializeField] private PlayerController player;
 
     // Animators of locations
@@ -24,8 +23,7 @@ public class GameUI : MonoBehaviour
     private void Update()
     {
         ChangeLocationIfTapOnMap();
-        goldAmount.text = player.playerStats.goldCoins.ToString();
-        diamondAmount.text = player.playerStats.diamonds.ToString();
+        
     }
 
     private void ChangeLocationIfTapOnMap()

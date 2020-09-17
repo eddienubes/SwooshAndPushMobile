@@ -10,8 +10,8 @@ public class LocationManager : MonoBehaviour
     public Location currentLocation;
     public Enemy currentEnemy;
     public HealthBarController healthBar;
-    [SerializeField] private Transform coinDropPosition;
     [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private CoinManager coinManager;
 
     private StageType stageType;
 
@@ -20,7 +20,6 @@ public class LocationManager : MonoBehaviour
         currentEnemy = new Enemy();
         stageType = StageType.Casual;
         SetUpScene();
-        
     }
 
     void Update()
@@ -85,10 +84,8 @@ public class LocationManager : MonoBehaviour
                     healthBar.SetMaxHealth(currentEnemy.currentHealth);
 
                     // Give some gold
-                    for (int i = 0; i < Random.Range(5, 10); ++i)
-                    {
-                        Instantiate(coinPrefab, coinDropPosition.position, coinDropPosition.rotation);
-                    }
+                    coinManager.SpawnCoins(5);
+
                     // Respawn enemy // TODO
                 }
                 break;

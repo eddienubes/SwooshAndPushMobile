@@ -6081,6 +6081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   locationManager: {fileID: 0}
+  playerLevel: 0
   lastActionTime: 0
   comboTime: 1
   playerAction: 0
@@ -6095,6 +6096,7 @@ MonoBehaviour:
     combo_clockWiseSlashDmg: 1000
     goldCoins: 0
     diamonds: 0
+    playerLevel: 0
 --- !u!224 &1124985566 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1697098880798819609, guid: fd6f9dda93d12db4aa845b4f92feff55,
@@ -6785,8 +6787,6 @@ MonoBehaviour:
   - {fileID: 1383793215}
   - {fileID: 1405074518}
   - {fileID: 378601890}
-  goldAmount: {fileID: 976877024}
-  diamondAmount: {fileID: 244544298}
   player: {fileID: 1082924319}
   map: {fileID: 1704468318}
 --- !u!4 &1304817138
@@ -10024,9 +10024,9 @@ MonoBehaviour:
     res_SuperBossMag: 0
     res_SuperBossPure: 0
   healthBar: {fileID: 1740713234}
-  coinDropPosition: {fileID: 1690106228}
   coinPrefab: {fileID: 9070107839225807177, guid: 6eeedcec0573d6c47bfdcb6b8f74cf4f,
     type: 3}
+  coinManager: {fileID: 1963929364}
 --- !u!114 &1963929363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10054,7 +10054,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0518375f8fa81c945bad73c77ebba0b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 9070107839225807177, guid: 6eeedcec0573d6c47bfdcb6b8f74cf4f, type: 3}
+  coinPrefab: {fileID: 9070107839225807177, guid: 6eeedcec0573d6c47bfdcb6b8f74cf4f,
+    type: 3}
+  animatedCoinPrefab: {fileID: 7932154179975643766, guid: 20ce80f8d0c2aba4bae41e8695846d1c,
+    type: 3}
+  targetForCoinAnimation: {fileID: 1169273580}
+  coinDropPosition: {fileID: 1690106228}
+  locationManager: {fileID: 0}
+  goldAmountUIText: {fileID: 976877024}
+  diamondAmountUIText: {fileID: 244544298}
+  coinQuantity: 50
+  minAnimationDuration: 0.7
+  maxAnimationDuration: 1.8
+  easeType: 28
+  coinsQuantityInAnimation: 5
+  goldAmount: 0
+  goldAmountMultiplier: 1000
 --- !u!224 &1973353863 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7601370911799074156, guid: bde1900f24f34274c997b36ba557eca3,
