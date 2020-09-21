@@ -22,8 +22,10 @@ public class Player : MonoBehaviour
     
     // Combo Stuff
     private Combo combo;
-    public static float ComboDmg = 0f;
-
+    private DamageIdicator damageType;
+    private float comboDmg = 0f;
+    
+    
     // Data vars
     public PlayerStats playerStats;
 
@@ -58,8 +60,6 @@ public class Player : MonoBehaviour
                     break;
                 case TouchPhase.Stationary:
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
         SaveSystem.SavePlayer(locationManager.currentLocation, playerStats);
     }
 
-    // Reseting position of our startTouch var
+    // Reset position of our startTouch var
     private void Reset()
     {
         startTouch = swipeDelta = Vector3.zero;
@@ -123,46 +123,45 @@ public class Player : MonoBehaviour
         // Using weapon argument as a modification for damage
         if (PlayerState == PlayerState.Idle && playerAction == PlayerAction.Tap)
         {
+            damageType = DamageIdicator.Raw;
             completeDamage += GetRawTapDmg();
 
             if (isCrit)
+            {
                 completeDamage += playerStats.critDamage;
+                damageType = DamageIdicator.Crit;
+            }
 
             completeDamage -= locationManager.CurrentEnemy.PhysicalResistance * completeDamage;
 
-            CombatTextManager.Instance.Show(completeDamage, isCrit);
+            CombatTextManager.Instance.Show(completeDamage, damageType);
 
             locationManager.CurrentEnemy.CurrentHealth -= completeDamage;
         }
 
-        if (PlayerState != PlayerState.Idle)
+        if (PlayerState == PlayerState.Idle) return;
+        
+        switch (PlayerState)
         {
-            switch (PlayerState)
-            {
-                case PlayerState.BloodOcean:
-                    locationManager.CurrentEnemy.CurrentHealth -= ComboDmg;
-                    // PlayerAnimationFunc
-                    break;
-                case PlayerState.LeftRightSlash:
-                    locationManager.CurrentEnemy.CurrentHealth -= ComboDmg;
-                    // PlayerAnimationFunc
-                    break;
-                case PlayerState.UpDownSlash:
-                    locationManager.CurrentEnemy.CurrentHealth -= ComboDmg;
-                    // PlayerAnimationFunc
-                    break;
-                case PlayerState.ClockwiseSlash:
-                    locationManager.CurrentEnemy.CurrentHealth -= ComboDmg;
-                    //Debug.Log("CLOCKWISE");
-                    // PlayerAnimationFunc
-                    break;
-                case PlayerState.Idle:
-                    break;
-                default:
-                    break;
-            }
-            combo.ResetCombo();
+            case PlayerState.BloodOcean:
+                // PlayerAnimationFunc
+                break;
+            case PlayerState.LeftRightSlash:
+                // PlayerAnimationFunc
+                break;
+            case PlayerState.UpDownSlash:
+                // PlayerAnimationFunc
+                break;
+            case PlayerState.ClockwiseSlash:
+                // PlayerAnimationFunc
+                break;
+            default:
+                break;
         }
+        CombatTextManager.Instance.Show(comboDmg, DamageIdicator.Ability);
+        locationManager.CurrentEnemy.CurrentHealth -= comboDmg;
+        
+        combo.ResetCombo();
     }
 
     // Allowing player to use combo if he didn't pass the time barrier
@@ -176,16 +175,14 @@ public class Player : MonoBehaviour
             if (IsComboAvailable())
             {
                 combo.AddComboInput(playerAction);
-                //Debug.Log("Added");
             }
         }
         if (combo.CurrentComboInputs.Count >= MINComboActionQuantity && !IsComboAvailable())
         {
             // Case when we don't find combo
-            if (!combo.GetPlayerStateIfComboExist())
+            if (!combo.GetPlayerStateIfComboExist(out comboDmg))
             {
                 combo.ResetCombo();
-                //Debug.Log("Reseted");
             }
         }
 

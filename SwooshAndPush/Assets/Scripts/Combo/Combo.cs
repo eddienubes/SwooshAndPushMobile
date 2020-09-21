@@ -70,23 +70,20 @@ public class Combo
     }
 
     // Checking if currentCombo ecuals to one of the sub-lists of allCombos and setting players state
-    public bool GetPlayerStateIfComboExist()
+    public bool GetPlayerStateIfComboExist(out float comboDmg)
     {
         //Debug.Log("CHECKIIIING!");
         foreach (var list in allCombos)
         {
-            if (list.Item1.SequenceEqual(CurrentComboInputs))
-            {
-                Player.PlayerState = list.Item2;
-                ComboDmg = list.Item3;
-                //Debug.Log("We've found this combo, wohoooo!");
-                return true;
-            }
-            //Debug.Log("CHEEECKING");
+            if (!list.Item1.SequenceEqual(CurrentComboInputs)) continue;
+            
+            Player.PlayerState = list.Item2;
+            comboDmg = list.Item3;
+            return true;
         }
         Player.PlayerState = PlayerState.Idle;
+        comboDmg = 0;
         ResetCombo();
-        //Debug.Log("We didn't found such a combo :c");
         return false;
     }
 

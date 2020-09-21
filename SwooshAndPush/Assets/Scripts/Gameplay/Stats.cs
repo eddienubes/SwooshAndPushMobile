@@ -95,5 +95,5 @@ public enum StageType
     }
 
     // Calculating Crit damage using formula
-    private float GetCritDmg() => ((phyMAXTapDmg + phyMINTapDmg) / 2) * 2;
+    private float GetCritDmg() => (phyMAXTapDmg + phyMINTapDmg) / 2 * 3;
 }

@@ -1,16 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum DamageIdicator
+{
+    Raw,
+    Crit,
+    Ability
+}
 
 public class CombatText
 {
     public bool IsActive;
     public GameObject GO;
     public Text Txt;
-    public readonly Vector3 TextOffset = new Vector2(0, 450);
-    
+    public Vector2 Motion = Vector2.up * 80;
+    public Vector3 Offset;
+
     private const float Duration = 2.2f;
-    private readonly Vector2 motion = Vector2.up * 80;
+    
     private float lastShow;
 
     public void Show()
@@ -35,20 +44,31 @@ public class CombatText
         {
             Hide();
         }
-        GO.transform.position += new Vector3(motion.x * Time.deltaTime, motion.y * Time.deltaTime);
+        GO.transform.position += new Vector3(Motion.x * Time.deltaTime, Motion.y * Time.deltaTime);
 
     }
 }
 
 public class CombatTextManager : MonoBehaviour
 {
-    public static CombatTextManager Instance { set; get; }
+    // Values to manipulate animation of the damage
+    private readonly Vector2 rawMotion = Vector2.up * 80;
+    private readonly Vector2 abilityMotion = Vector2.up * 40;
+    private readonly Vector2 critMotion = Vector2.up * 40;
+    
+    private readonly Vector3 textRawOffset = new Vector2(0, 450);
+    private readonly Vector3 textAbilityOffset = new Vector3(-100, 450);
+    private readonly Vector3 textCritOffset = new Vector3(100, 450);
+    
+    public static CombatTextManager Instance { private set; get; }
 
     public GameObject combatTextContainer;
     public GameObject combatTextPrefab;
 
     private readonly List<CombatText> combatTexts = new List<CombatText>();
     private GameObject ui;
+    
+    
     
     private void Start()
     {
@@ -72,22 +92,24 @@ public class CombatTextManager : MonoBehaviour
         // In case we don't find - we create a new one or, otherwise, reset transform position
         if (cmb == null)
         {
-            cmb = new CombatText();
-            cmb.GO = Instantiate(combatTextPrefab, combatTextContainer.transform.position + cmb.TextOffset, Quaternion.identity, ui.transform);
-            
-            
+            cmb = new CombatText
+            {
+                GO = Instantiate(combatTextPrefab, combatTextContainer.transform.position, Quaternion.identity,
+                    ui.transform)
+            };
+
             cmb.Txt = cmb.GO.GetComponent<Text>();
              
             combatTexts.Add(cmb);
         }
         else
         {
-            cmb.GO.transform.position = combatTextContainer.transform.position + cmb.TextOffset;
+            cmb.GO.transform.position = combatTextContainer.transform.position;
         }
         return cmb;
     }
 
-    public void Show(float damage, bool isCrit)
+    public void Show(float damage, DamageIdicator indicator)
     {
         // Getting slot
         CombatText cmb = GetCombatText();
@@ -97,7 +119,26 @@ public class CombatTextManager : MonoBehaviour
 
         // Test code // Will be deleted in the future // TODO
 
-        cmb.Txt.color = isCrit ? Color.red : Color.white;
+        switch (indicator)
+        {
+            case DamageIdicator.Raw:
+                cmb.GO.transform.position = combatTextContainer.transform.position + textRawOffset;
+                cmb.Txt.color = Color.white;
+                cmb.Motion = rawMotion;
+                break;
+            case DamageIdicator.Ability:
+                cmb.GO.transform.position = combatTextContainer.transform.position + textAbilityOffset;
+                cmb.Txt.color = Color.magenta;
+                cmb.Motion = abilityMotion;
+                break;
+            case DamageIdicator.Crit:
+                cmb.GO.transform.position = combatTextContainer.transform.position + textCritOffset;
+                cmb.Txt.color = Color.red;
+                cmb.Motion = critMotion;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         
         cmb.Show();
     }
