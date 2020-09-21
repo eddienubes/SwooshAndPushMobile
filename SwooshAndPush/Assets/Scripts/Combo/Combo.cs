@@ -2,70 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using static PlayerController;
+using static Player;
 using System;
 
 public class Combo 
 {
     
-    public List<PlayerAction> currentComboInputs = new List<PlayerAction>();
+    public readonly List<PlayerAction> CurrentComboInputs = new List<PlayerAction>();
 
-    public List<Tuple<List<PlayerAction>, PlayerState, float>> allCombos = new List<Tuple<List<PlayerAction>, PlayerState, float>>();
+    private readonly List<Tuple<List<PlayerAction>, PlayerState, float>> allCombos = new List<Tuple<List<PlayerAction>, PlayerState, float>>();
 
-    public Combo()
+    public Combo(PlayerStats playerStats)
     {
         // Tuples of existing combos
-        var BloodOcean = Tuple.Create(new List<PlayerAction>
+        var bloodOcean = Tuple.Create(new List<PlayerAction>
         {
             PlayerAction.SwipeLeft,
             PlayerAction.SwipeLeft,
             PlayerAction.SwipeUp,
             PlayerAction.SwipeDown
-        },  PlayerState.BloodOcean, 500f);
+        },  PlayerState.BloodOcean, playerStats.comboBloodOceanDmg);
 
-        var LeftRightSlash = Tuple.Create(new List<PlayerAction>
+        var leftRightSlash = Tuple.Create(new List<PlayerAction>
         {
-            PlayerAction.SwipeLeft, 
+            PlayerAction.SwipeLeft,     
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeLeft, 
             PlayerAction.SwipeRight
-        },  PlayerState.LeftRightSlash, 700f);
+        },  PlayerState.LeftRightSlash, playerStats.comboLeftRightSlashDmg);
 
-        var UpDownSlash = Tuple.Create(new List<PlayerAction>
+        var upDownSlash = Tuple.Create(new List<PlayerAction>
         {
             PlayerAction.SwipeUp, 
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeUp, 
             PlayerAction.SwipeDown
-        },  PlayerState.UpDownSlash, 200f);
+        },  PlayerState.UpDownSlash, playerStats.comboUpDownSlashDmg);
 
-        var ClockwiseSlash = Tuple.Create(new List<PlayerAction>
+        var clockwiseSlash = Tuple.Create(new List<PlayerAction>
         {
             PlayerAction.SwipeUp, 
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeLeft
-        },  PlayerState.ClockwiseSlash, 1000f);
+        },  PlayerState.ClockwiseSlash, playerStats.comboClockWiseSlashDmg);
 
         //Adding Combos to comboList
-        allCombos.Add(BloodOcean);
-        allCombos.Add(LeftRightSlash);
-        allCombos.Add(UpDownSlash);
-        allCombos.Add(ClockwiseSlash);
+        allCombos.Add(bloodOcean);
+        allCombos.Add(leftRightSlash);
+        allCombos.Add(upDownSlash);
+        allCombos.Add(clockwiseSlash);
 
     }
 
     // Add combo
     public void AddComboInput(PlayerAction input)
     {
-        currentComboInputs.Add(input);
+        CurrentComboInputs.Add(input);
     }
 
     // Clearing allComboList
     public void ResetCombo()
     {
-        currentComboInputs.Clear();
-        playerState = PlayerState.Idle;
+        CurrentComboInputs.Clear();
+        Player.PlayerState = PlayerState.Idle;
         //Debug.Log("Reseted!");
     }
 
@@ -75,16 +75,16 @@ public class Combo
         //Debug.Log("CHECKIIIING!");
         foreach (var list in allCombos)
         {
-            if (list.Item1.SequenceEqual(currentComboInputs))
+            if (list.Item1.SequenceEqual(CurrentComboInputs))
             {
-                playerState = list.Item2;
-                comboDmg = list.Item3;
+                Player.PlayerState = list.Item2;
+                ComboDmg = list.Item3;
                 //Debug.Log("We've found this combo, wohoooo!");
                 return true;
             }
             //Debug.Log("CHEEECKING");
         }
-        playerState = PlayerState.Idle;
+        Player.PlayerState = PlayerState.Idle;
         ResetCombo();
         //Debug.Log("We didn't found such a combo :c");
         return false;

@@ -2001,7 +2001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -39.99994}
+  m_AnchoredPosition: {x: 0, y: -40}
   m_SizeDelta: {x: 1000, y: 750}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &283423001
@@ -3441,6 +3441,7 @@ GameObject:
   - component: {fileID: 490185358}
   - component: {fileID: 490185357}
   - component: {fileID: 490185360}
+  - component: {fileID: 490185361}
   m_Layer: 5
   m_Name: ButtomUI
   m_TagString: Untagged
@@ -3548,6 +3549,18 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &490185361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490185355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e35e726b8f3db44bead2f3675d1101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &492687907
 GameObject:
   m_ObjectHideFlags: 0
@@ -5937,7 +5950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1075663410
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6077,7 +6090,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1082924317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 075698d629c5add4387211d7efeba1f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 10633ba54360c764289ca7b146827c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   locationManager: {fileID: 0}
@@ -6086,17 +6099,17 @@ MonoBehaviour:
   comboTime: 1
   playerAction: 0
   playerStats:
-    phy_minTapDmg: 90
-    phy_maxTapDmg: 150
-    luck_PhysicalCrit: 0.1
-    crit_dmg: 240
-    combo_bloodOceanDmg: 500
-    combo_leftRightSlashDmg: 700
-    combo_upDownSlashDmg: 200
-    combo_clockWiseSlashDmg: 1000
+    phyMINTapDmg: 90
+    phyMAXTapDmg: 150
+    luckPhysicalCrit: 0.1
+    critDamage: 240
+    comboBloodOceanDmg: 500
+    comboLeftRightSlashDmg: 700
+    comboUpDownSlashDmg: 200
+    comboClockWiseSlashDmg: 1000
     goldCoins: 0
     diamonds: 0
-    playerLevel: 0
+    playerLevel: 1
 --- !u!224 &1124985566 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1697098880798819609, guid: fd6f9dda93d12db4aa845b4f92feff55,
@@ -6574,10 +6587,10 @@ RectTransform:
   m_Father: {fileID: 1704468319}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -167, y: 91}
-  m_SizeDelta: {x: 691.6634, y: 723.55145}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -167, y: 631}
+  m_SizeDelta: {x: -1233, y: 1444}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1215229942
 MonoBehaviour:
@@ -7542,7 +7555,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Percs
+  m_Text: Character
 --- !u!222 &1470750839
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8589,10 +8602,10 @@ RectTransform:
   m_Father: {fileID: 1786405719}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -960.02}
-  m_SizeDelta: {x: 1079.9961, y: 1920.034}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1704468320
 MonoBehaviour:
@@ -10008,21 +10021,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLocation:
     name: 
-    health_minCasual: 0
-    health_maxCasual: 0
-    health_minBoss: 0
-    health_maxBoss: 0
-    health_minSuperBoss: 0
-    health_maxSuperBoss: 0
-    res_CasualPhysical: 0
-    res_CasualMag: 0
-    res_CasualPure: 0
-    res_BossPhysical: 0
-    res_BossMag: 0
-    res_BossPure: 0
-    res_SuperBossPhysical: 0
-    res_SuperBossMag: 0
-    res_SuperBossPure: 0
+    healthMINCasual: 10000
+    healthMAXCasual: 15000
+    healthMINBoss: 30000
+    healthMAXBoss: 35000
+    healthMINSuperBoss: 45000
+    healthMAXSuperBoss: 50000
+    resCasualPhysical: 0.3
+    resCasualMag: 0.3
+    resCasualPure: 0.3
+    resBossPhysical: 0.1
+    resBossMag: 0.6
+    resBossPure: 0.3
+    resSuperBossPhysical: 0.3
+    resSuperBossMag: 0.3
+    resSuperBossPure: 0.3
   healthBar: {fileID: 1740713234}
   coinPrefab: {fileID: 9070107839225807177, guid: 6eeedcec0573d6c47bfdcb6b8f74cf4f,
     type: 3}
@@ -10934,6 +10947,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1834323833}
     m_Modifications:
+    - target: {fileID: 1149732819927567376, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 483.1062
+      objectReference: {fileID: 0}
+    - target: {fileID: 1149732819927567376, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 28.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1149732819927567376, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 43.806763
+      objectReference: {fileID: 0}
     - target: {fileID: 1976484447743239615, guid: 317c3887a66585b429b384ba9db0c4c6,
         type: 3}
       propertyPath: m_Name
@@ -11043,6 +11071,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621377521013984487, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_Text
+      value: Player level
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621377521013984487, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621377521013984487, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_FontData.m_RichText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621377521013984487, guid: 317c3887a66585b429b384ba9db0c4c6,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 6893733724629449904, guid: 317c3887a66585b429b384ba9db0c4c6,
         type: 3}

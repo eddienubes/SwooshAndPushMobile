@@ -8,10 +8,10 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject[] panels;
     [SerializeField] private Button[] buttons;
     
-    [SerializeField] private PlayerController player;
+    [SerializeField] private Player player;
 
     // Animators of locations
-    private Animator a_tappedLocation;
+    private Animator aTappedLocLocation;
     [SerializeField] private GameObject map;
 
     private void Start()
@@ -23,65 +23,58 @@ public class GameUI : MonoBehaviour
     private void Update()
     {
         ChangeLocationIfTapOnMap();
-        
     }
 
     private void ChangeLocationIfTapOnMap()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount <= 0) return;
+        
+        Vector2 touchPosition = new Vector2(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
+            
+        if (!Physics2D.OverlapPoint(touchPosition)) return;
+            
+        switch (Physics2D.OverlapPoint(touchPosition).name)
         {
-
-            Vector2 touchPosition = new Vector2(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
-
-
-            if (Physics2D.OverlapPoint(touchPosition))
-            {
-                switch (Physics2D.OverlapPoint(touchPosition).name)
-                {
-                    case "Tropical Forest":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    case "Forgotten Desert":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    case "Wild Lands":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    case "Pacific Island":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    case "Heaven Gates":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    case "Peace Land":
-                        PlayCurrentTapAnimationOnMap(touchPosition, Physics2D.OverlapPoint(touchPosition).name);
-                        break;
-                    default:
-                        Debug.Log("Default!");
-                        break;
-
-                }
-                if (Input.touches[0].phase == TouchPhase.Canceled || Input.touches[0].phase == TouchPhase.Ended)
-                {
-                    Debug.Log("Tap has ended!");
-                    a_tappedLocation.SetBool("HasTapEnded", true);
-                    Debug.Log(Physics2D.OverlapPoint(touchPosition).gameObject.name);
-                    a_tappedLocation.SetBool("isIdle", true);
-                }
-            }
-
+            case "Tropical Forest":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            case "Forgotten Desert":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            case "Wild Lands":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            case "Pacific Island":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            case "Heaven Gates":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            case "Peace Land":
+                PlayCurrentTapAnimationOnMap(Physics2D.OverlapPoint(touchPosition).name);
+                break;
+            default:
+                Debug.Log("Default!");
+                break;
         }
+            
+        if (Input.touches[0].phase != TouchPhase.Canceled && Input.touches[0].phase != TouchPhase.Ended) 
+            return;
+                
+        aTappedLocLocation.SetBool("HasTapEnded", true);
+                
+        aTappedLocLocation.SetBool("isIdle", true);
     }
 
-    private void PlayCurrentTapAnimationOnMap(Vector2 _touchPosition, string objName)
+    private void PlayCurrentTapAnimationOnMap(string objName)
     {
         // Write location utility function to continue animation an load next scene
-        a_tappedLocation = GameObject.Find(objName).GetComponent<Animator>();
-        a_tappedLocation.SetBool("isIdle", false);
-        a_tappedLocation.SetBool("isTapped", true);
+        aTappedLocLocation = GameObject.Find(objName).GetComponent<Animator>();
+        aTappedLocLocation.SetBool("isIdle", false);
+        aTappedLocLocation.SetBool("isTapped", true);
         //Debug.Log("Tap Animation!");
     }
-
+    
    
     // Finds the panel that player pressed, and turns off everything else
     public void NavigateTo(int menuIndex)
@@ -94,9 +87,7 @@ public class GameUI : MonoBehaviour
                 buttons[i].Select();
             }
             else
-            {
                 panels[i].SetActive(false);
-            }
         }
     }
 
@@ -105,5 +96,4 @@ public class GameUI : MonoBehaviour
         bool isActive = map.gameObject.activeSelf;
         map.gameObject.SetActive(!isActive);
     }
-
 }

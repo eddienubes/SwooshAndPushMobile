@@ -13,14 +13,8 @@ public class HealthBarController : MonoBehaviour
     // Health number percentage
     private float currentPercent;
 
-    void Start()
+    private void Update()
     {
-
-    }
-
-    void Update()
-    {
-        
         currentPercent = slider.value / slider.maxValue;
         healthCounter.text = slider.value.ToString("0.00");
         fill.color = Color.Lerp(Color.red, Color.green, currentPercent);

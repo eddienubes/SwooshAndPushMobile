@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using UnityEngine;
 
 public enum PlayerState
 {
@@ -30,36 +26,36 @@ public enum StageType
     SuperBoss
 }
 
-[System.Serializable] public class Location // TODO Copy to JSon
+[Serializable] public class Location
 {
-    public string name;
+    public string name = "Loren";
 
     // Health
-    public float health_minCasual;
-    public float health_maxCasual;
+    public float healthMINCasual = 10000f;
+    public float healthMAXCasual = 15000f;
 
-    public float health_minBoss;
-    public float health_maxBoss;
+    public float healthMINBoss = 30000f;
+    public float healthMAXBoss = 35000f;
 
-    public float health_minSuperBoss;
-    public float health_maxSuperBoss;
+    public float healthMINSuperBoss = 45000f;
+    public float healthMAXSuperBoss = 50000f;
 
     // Resistance
 
     //  // Casual
-    public float res_CasualPhysical;
-    public float res_CasualMag;
-    public float res_CasualPure;
+    public float resCasualPhysical = 0.3f;
+    public float resCasualMag = 0.3f;
+    public float resCasualPure = 0.3f;
 
     //  // Bosses
-    public float res_BossPhysical;
-    public float res_BossMag;
-    public float res_BossPure;
+    public float resBossPhysical = 0.1f;
+    public float resBossMag = 0.6f;
+    public float resBossPure = 0.3f;
 
     //  // SuperBosses
-    public float res_SuperBossPhysical;
-    public float res_SuperBossMag;
-    public float res_SuperBossPure;
+    public float resSuperBossPhysical = 0.3f;
+    public float resSuperBossMag = 0.3f;
+    public float resSuperBossPure = 0.3f;
 
     public Location()
     {
@@ -67,36 +63,37 @@ public enum StageType
     }
 }
 
-[System.Serializable] public class PlayerStats
+[Serializable] public class PlayerStats
 {
     // Physical dmg(tap)
-    public float phy_minTapDmg;
-    public float phy_maxTapDmg;
+    public float phyMINTapDmg = 90.0f;
+    public float phyMAXTapDmg = 150.0f;
 
     // Luck
-    public float luck_PhysicalCrit;
+    public float luckPhysicalCrit = 0.1f;
 
     // Values of crit
-    public float crit_dmg;
+    public float critDamage;
 
     // Combo Damages
-    public float combo_bloodOceanDmg;
-    public float combo_leftRightSlashDmg;
-    public float combo_upDownSlashDmg;
-    public float combo_clockWiseSlashDmg;
+    public float comboBloodOceanDmg = 500.0f;
+    public float comboLeftRightSlashDmg = 700.0f;
+    public float comboUpDownSlashDmg = 200.0f;
+
+    public float comboClockWiseSlashDmg = 1000.0f;
 
     // Currencies
-    public float goldCoins;
-    public int diamonds;
+    public float goldCoins = 0;
+    public int diamonds = 0;
 
-    public int playerLevel;
+    public int playerLevel = 1;
 
     public PlayerStats()
     {
         
-        crit_dmg = GetCritDmg();
+        critDamage = GetCritDmg();
     }
 
     // Calculating Crit damage using formula
-    private float GetCritDmg() => ((phy_maxTapDmg + phy_minTapDmg) / 2) * 2;
+    private float GetCritDmg() => ((phyMAXTapDmg + phyMINTapDmg) / 2) * 2;
 }

@@ -6,36 +6,41 @@ using UnityEditor;
 
 public static class SaveSystem
 {
-
     public static void SavePlayer(Location loc, PlayerStats stats)
     {
         string jsonLoc = JsonUtility.ToJson(loc);
         string jsonPlayer = JsonUtility.ToJson(stats);
 
-        //string pathLoc = Path.Combine(Application.persistentDataPath, "playerconfig.json");
-        //string pathPlayer = Path.Combine(Application.persistentDataPath, "locationconfig.json");
+        string pathPlayer = Path.Combine(Application.persistentDataPath, "playerconfig.json");
+        string pathLoc = Path.Combine(Application.persistentDataPath, "locationconfig.json");
 
-        string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
-        string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
+        //string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
+        //string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
 
-        File.WriteAllText(pathLoc, jsonPlayer);
-        File.WriteAllText(pathPlayer, jsonLoc);
+        File.WriteAllText(pathPlayer, jsonPlayer);
+        File.WriteAllText(pathLoc, jsonLoc);
     }
 
     public static void LoadPlayer(out Location loc, out PlayerStats stats)
     {
-        //string pathLoc = Path.Combine(Application.persistentDataPath, "playerconfig.json");
-        //string pathPlayer = Path.Combine(Application.persistentDataPath, "locationconfig.json");
 
-        string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
-        string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
+        if (PlayerPrefs.GetInt("FIRSTLAUNCH", 1) == 1)
+        {
+            PlayerStats playerStats = new PlayerStats();
+            PlayerPrefs.SetInt("FIRSTLAUNCH", 0);
+            Location location = new Location();
+            SavePlayer(location, playerStats);
+        }
+        
+        string pathPlayer = Path.Combine(Application.persistentDataPath, "playerconfig.json");
+        string pathLoc = Path.Combine(Application.persistentDataPath, "locationconfig.json");
 
-        string jsonPlayer = File.ReadAllText(pathLoc);
-        string jsonLoc = File.ReadAllText(pathPlayer);
+        //string pathLoc = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\playerconfig.json";
+        //string pathPlayer = "D:\\CODE\\Unity\\SwooshAndPushMobile\\SwooshAndPush\\Assets\\Data\\locationconfig.json";
 
+        string jsonPlayer = File.ReadAllText(pathPlayer);
+        string jsonLoc = File.ReadAllText(pathLoc);
         stats = JsonUtility.FromJson<PlayerStats>(jsonPlayer);
         loc = JsonUtility.FromJson<Location>(jsonLoc);
     }
-
-
 }

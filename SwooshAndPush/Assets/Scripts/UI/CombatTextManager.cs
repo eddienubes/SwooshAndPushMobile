@@ -1,42 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CombatText
 {
-    public bool isActive;
-    public GameObject go;
-    public Text txt;
-    public Vector2 motion = Vector2.up * 80;
-    public float duration = 2.2f;
-    public float lastShow;
-    public Vector3 textOffset = new Vector2(0, 450);
+    public bool IsActive;
+    public GameObject GO;
+    public Text Txt;
+    public readonly Vector3 TextOffset = new Vector2(0, 450);
+    
+    private const float Duration = 2.2f;
+    private readonly Vector2 motion = Vector2.up * 80;
+    private float lastShow;
 
     public void Show()
     {
-        isActive = true;
+        IsActive = true;
         lastShow = Time.time;
-        go.SetActive(true);
+        GO.SetActive(true);
     }
 
-    public void Hide()
+    private void Hide()
     {
-        this.isActive = false;
-        go.SetActive(false);
+        IsActive = false;
+        GO.SetActive(false);
     }
 
     public void UpdateCombatText()
     {
-        if (!isActive)
+        if (!IsActive)
             return;
 
-        if (Time.time - lastShow > duration)
+        if (Time.time - lastShow > Duration)
         {
-            //Debug.Log("HIDDEN!");
             Hide();
         }
-        go.transform.position += new Vector3(motion.x * Time.deltaTime, motion.y * Time.deltaTime);
+        GO.transform.position += new Vector3(motion.x * Time.deltaTime, motion.y * Time.deltaTime);
 
     }
 }
@@ -48,10 +47,12 @@ public class CombatTextManager : MonoBehaviour
     public GameObject combatTextContainer;
     public GameObject combatTextPrefab;
 
-    private List<CombatText> combatTexts = new List<CombatText>();
-
+    private readonly List<CombatText> combatTexts = new List<CombatText>();
+    private GameObject ui;
+    
     private void Start()
     {
+        ui = GameObject.Find("Interface");
         Instance = this;
     }
 
@@ -66,20 +67,22 @@ public class CombatTextManager : MonoBehaviour
     private CombatText GetCombatText()
     {
         // Trying to find empty "slot" to insert text
-        CombatText cmb = combatTexts.Find(c => !c.isActive);
+        CombatText cmb = combatTexts.Find(c => !c.IsActive);
 
         // In case we don't find - we create a new one or, otherwise, reset transform position
         if (cmb == null)
         {
             cmb = new CombatText();
-            cmb.go = Instantiate(combatTextPrefab, combatTextContainer.transform.position + cmb.textOffset, Quaternion.identity, GameObject.Find("Interface").transform);
-
-            cmb.txt = cmb.go.GetComponent<Text>();
+            cmb.GO = Instantiate(combatTextPrefab, combatTextContainer.transform.position + cmb.TextOffset, Quaternion.identity, ui.transform);
+            
+            
+            cmb.Txt = cmb.GO.GetComponent<Text>();
+             
             combatTexts.Add(cmb);
         }
         else
         {
-            cmb.go.transform.position = combatTextContainer.transform.position + cmb.textOffset;
+            cmb.GO.transform.position = combatTextContainer.transform.position + cmb.TextOffset;
         }
         return cmb;
     }
@@ -90,15 +93,12 @@ public class CombatTextManager : MonoBehaviour
         CombatText cmb = GetCombatText();
 
         // Assinging incoming damage, and rounding to 0.00 format
-        cmb.txt.text = damage.ToString("0.00");
+        cmb.Txt.text = damage.ToString("0.00");
 
         // Test code // Will be deleted in the future // TODO
-        if (isCrit)
-            cmb.txt.color = Color.red;
-        else
-            cmb.txt.color = Color.white;
 
-        //Debug.Log("SHOWED!");
+        cmb.Txt.color = isCrit ? Color.red : Color.white;
+        
         cmb.Show();
     }
 }

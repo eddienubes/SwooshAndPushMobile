@@ -11,7 +11,7 @@ public class ButtomUIOpenClose : MonoBehaviour
     [SerializeField] private RectTransform buttomUI;
     [SerializeField] private Text buttonText;
 
-    private float duration = 0.4f;
+    private const float Duration = 0.4f;
 
     private void Start()
     {
@@ -28,7 +28,7 @@ public class ButtomUIOpenClose : MonoBehaviour
         Vector3 endPosition = isOpened ? new Vector3(0, 0, 0) : new Vector3(0, -945, 0);
         buttonText.text = isOpened ? "Close" : "Open";
 
-        var tweener = buttomUI.DOAnchorPos(endPosition, duration).SetEase(Ease.InCirc);
+        var tweener = buttomUI.DOAnchorPos(endPosition, Duration).SetEase(Ease.InCirc);
 
         while (tweener.IsActive()) { yield return null; }
 

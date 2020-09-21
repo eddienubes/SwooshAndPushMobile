@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class CoinManager : MonoBehaviour
 {
     [Header("Game objects used in the script")]
-    private PlayerController player;
+    private Player player;
     [SerializeField] private GameObject coinPrefab;
     [SerializeField] private GameObject animatedCoinPrefab;
     [SerializeField] private Transform targetForCoinAnimation;
@@ -22,8 +22,8 @@ public class CoinManager : MonoBehaviour
 
     [Space]
     [Header("Available coin : (coins to pool)")]
-    [SerializeField] int coinQuantity;
-    Queue<GameObject> coinsQueue = new Queue<GameObject>();
+    [SerializeField] private int coinQuantity;
+    private readonly Queue<GameObject> coinsQueue = new Queue<GameObject>();
 
     [Space]
     [Header("Animation settings")]
@@ -37,7 +37,7 @@ public class CoinManager : MonoBehaviour
     [Header("Values")]
     [SerializeField] private float goldAmount;
     [SerializeField] private float goldAmountMultiplier = 1000f;
-    private int coinLifeInSeconds = 5;
+    private const int CoinLifeInSeconds = 5;
     
     private void Awake()
     {
@@ -48,8 +48,8 @@ public class CoinManager : MonoBehaviour
     private void Start()
     {
         locationManager = GameObject.Find("Location Manager").GetComponent<LocationManager>();
-        player = GameObject.Find("Input").GetComponent<PlayerController>();
-        goldAmount = (player.playerLevel * locationManager.currentEnemy.maxHealth) / goldAmountMultiplier;
+        player = GameObject.Find("Input").GetComponent<Player>();
+        goldAmount = (player.playerLevel * locationManager.CurrentEnemy.MAXHealth) / goldAmountMultiplier;
         
     }
 
@@ -60,20 +60,19 @@ public class CoinManager : MonoBehaviour
         diamondAmountUIText.text = player.playerStats.diamonds.ToString();
 
         #region Touch input
+        
         // Detecting touch input for coins
-        if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+        if (Input.touchCount <= 0 || Input.touches[0].phase != TouchPhase.Began) return;
+        Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+        if (hit.collider == null) return;
+        
+        if (hit.collider.gameObject.CompareTag("coin"))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-            
-            if (hit.collider != null)
-            {
-                if (hit.collider.gameObject.CompareTag("coin"))
-                {
-                    IncreaseGoldAndDestroyCoin(hit.collider.gameObject);
-                }
-            }
+            IncreaseGoldAndDestroyCoin(hit.collider.gameObject);
         }
+        
         #endregion
     }
 
@@ -89,9 +88,8 @@ public class CoinManager : MonoBehaviour
                 // Dequeue coin and animate it
                 GameObject coin = coinsQueue.Dequeue();
                 coin.SetActive(true);
-                Debug.Log("ACTIVE");
                 coin.transform.position = collectedCoinPosition.transform.position;
-                Debug.Log(targetPosition);
+                
                 // Animate coin
                 float duration = Random.Range(minAnimationDuration, maxAnimationDuration);
                 coin.transform.DOMove(targetPosition, duration)
@@ -103,7 +101,6 @@ public class CoinManager : MonoBehaviour
                         coinsQueue.Enqueue(coin);
                     });
             }
-            Debug.Log(player.playerStats.goldCoins);
         }
     }
 
@@ -127,7 +124,7 @@ public class CoinManager : MonoBehaviour
 
     public IEnumerator CountDownToDestroy(GameObject coin)
     {
-        int countDown = coinLifeInSeconds;
+        int countDown = CoinLifeInSeconds;
         while (countDown > 0)
         {
             yield return new WaitForSeconds(1);

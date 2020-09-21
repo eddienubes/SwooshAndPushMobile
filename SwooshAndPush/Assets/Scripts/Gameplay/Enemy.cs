@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class Enemy
 {
     // Enemy states
-    public float maxHealth;
-    public float currentHealth;
+    public float MAXHealth;
+    public float CurrentHealth;
 
-    public float physicalResistance;
-    public float magicResistance;
-    public float pureResistance;
+    public float PhysicalResistance;
+    public float MagicResistance;
+    public float PureResistance;
 }
