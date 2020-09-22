@@ -10,7 +10,7 @@ public class Combo
     
     public readonly List<PlayerAction> CurrentComboInputs = new List<PlayerAction>();
 
-    private readonly List<Tuple<List<PlayerAction>, PlayerState, float>> allCombos = new List<Tuple<List<PlayerAction>, PlayerState, float>>();
+    private readonly List<Tuple<List<PlayerAction>, ComboType, float>> allCombos = new List<Tuple<List<PlayerAction>, ComboType, float>>();
 
     public Combo(PlayerStats playerStats)
     {
@@ -21,7 +21,7 @@ public class Combo
             PlayerAction.SwipeLeft,
             PlayerAction.SwipeUp,
             PlayerAction.SwipeDown
-        },  PlayerState.BloodOcean, playerStats.comboBloodOceanDmg);
+        },  ComboType.BloodOcean, playerStats.ComboBloodOceanDmg);
 
         var leftRightSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -29,7 +29,7 @@ public class Combo
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeLeft, 
             PlayerAction.SwipeRight
-        },  PlayerState.LeftRightSlash, playerStats.comboLeftRightSlashDmg);
+        },  ComboType.LeftRightSlash, playerStats.ComboLeftRightSlashDmg);
 
         var upDownSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -37,7 +37,7 @@ public class Combo
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeUp, 
             PlayerAction.SwipeDown
-        },  PlayerState.UpDownSlash, playerStats.comboUpDownSlashDmg);
+        },  ComboType.UpDownSlash, playerStats.ComboUpDownSlashDmg);
 
         var clockwiseSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -45,7 +45,7 @@ public class Combo
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeLeft
-        },  PlayerState.ClockwiseSlash, playerStats.comboClockWiseSlashDmg);
+        },  ComboType.ClockwiseSlash, playerStats.ComboClockWiseSlashDmg);
 
         //Adding Combos to comboList
         allCombos.Add(bloodOcean);
@@ -65,7 +65,7 @@ public class Combo
     public void ResetCombo()
     {
         CurrentComboInputs.Clear();
-        Player.PlayerState = PlayerState.Idle;
+        Player.ComboType = ComboType.Idle;
         //Debug.Log("Reseted!");
     }
 
@@ -77,11 +77,11 @@ public class Combo
         {
             if (!list.Item1.SequenceEqual(CurrentComboInputs)) continue;
             
-            Player.PlayerState = list.Item2;
-            comboDmg = list.Item3;
+            Player.ComboType = list.Item2;
+            comboDmg = list.Item3; 
             return true;
         }
-        Player.PlayerState = PlayerState.Idle;
+        Player.ComboType = ComboType.Idle;
         comboDmg = 0;
         ResetCombo();
         return false;

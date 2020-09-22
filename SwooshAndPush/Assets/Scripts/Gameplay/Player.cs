@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // GameObjects and components
-    [HideInInspector] public LocationManager locationManager;
-
     // Values
     private const int MINComboActionQuantity = 4;
     
@@ -18,7 +15,7 @@ public class Player : MonoBehaviour
         
     // Player Action variables
     [SerializeField] private PlayerAction playerAction;
-    public static PlayerState PlayerState = PlayerState.Idle;
+    public static ComboType ComboType = ComboType.Idle;
     
     // Combo Stuff
     private Combo combo;
@@ -27,15 +24,14 @@ public class Player : MonoBehaviour
     
     
     // Data vars
-    public PlayerStats playerStats;
+    public static PlayerStats PlayerStats;
 
     private void Start()
     {
-        locationManager = GameObject.Find("Location Manager").GetComponent<LocationManager>();
-        SaveSystem.LoadPlayer(out locationManager.currentLocation, out playerStats);
-        combo = new Combo(playerStats);
+        SaveSystem.LoadPlayer();
+        combo = new Combo(PlayerStats);
         touchBounds = (float)(Screen.height * 0.15); // 0.15 - 300 pixels of standart 1080 x 1920 mobile screen size
-        playerLevel = playerStats.playerLevel;
+        playerLevel = PlayerStats.PlayerLevel;
     }
 
     private void Update()
@@ -98,13 +94,13 @@ public class Player : MonoBehaviour
     {
         if (pause)
         {
-            SaveSystem.SavePlayer(locationManager.currentLocation, playerStats);
+            SaveSystem.SavePlayer();
         }
     }
 
     private void OnApplicationQuit()
     {
-        SaveSystem.SavePlayer(locationManager.currentLocation, playerStats);
+        SaveSystem.SavePlayer();
     }
 
     // Reset position of our startTouch var
@@ -121,45 +117,43 @@ public class Player : MonoBehaviour
         float completeDamage = 0f;
 
         // Using weapon argument as a modification for damage
-        if (PlayerState == PlayerState.Idle && playerAction == PlayerAction.Tap)
+        if (ComboType == ComboType.Idle && playerAction == PlayerAction.Tap)
         {
             damageType = DamageIdicator.Raw;
-            completeDamage += GetRawTapDmg();
-
+            completeDamage += PlayerStats.PhysicalTapDamage;
             if (isCrit)
             {
-                completeDamage += playerStats.critDamage;
+                completeDamage += PlayerStats.CritDamage;
                 damageType = DamageIdicator.Crit;
             }
-
-            completeDamage -= locationManager.CurrentEnemy.PhysicalResistance * completeDamage;
+            completeDamage -= LocationManager.CurrentEnemy.PhysicalResistance * completeDamage;
 
             CombatTextManager.Instance.Show(completeDamage, damageType);
 
-            locationManager.CurrentEnemy.CurrentHealth -= completeDamage;
+            LocationManager.CurrentEnemy.CurrentHealth -= completeDamage;
         }
 
-        if (PlayerState == PlayerState.Idle) return;
+        if (ComboType == ComboType.Idle) return;
         
-        switch (PlayerState)
+        switch (ComboType)
         {
-            case PlayerState.BloodOcean:
+            case ComboType.BloodOcean:
                 // PlayerAnimationFunc
                 break;
-            case PlayerState.LeftRightSlash:
+            case ComboType.LeftRightSlash:
                 // PlayerAnimationFunc
                 break;
-            case PlayerState.UpDownSlash:
+            case ComboType.UpDownSlash:
                 // PlayerAnimationFunc
                 break;
-            case PlayerState.ClockwiseSlash:
+            case ComboType.ClockwiseSlash:
                 // PlayerAnimationFunc
                 break;
             default:
                 break;
         }
         CombatTextManager.Instance.Show(comboDmg, DamageIdicator.Ability);
-        locationManager.CurrentEnemy.CurrentHealth -= comboDmg;
+        LocationManager.CurrentEnemy.CurrentHealth -= comboDmg;
         
         combo.ResetCombo();
     }
@@ -177,7 +171,7 @@ public class Player : MonoBehaviour
                 combo.AddComboInput(playerAction);
             }
         }
-        if (combo.CurrentComboInputs.Count >= MINComboActionQuantity && !IsComboAvailable())
+        if (combo.CurrentComboInputs.Count >= MINComboActionQuantity)
         {
             // Case when we don't find combo
             if (!combo.GetPlayerStateIfComboExist(out comboDmg))
@@ -194,7 +188,5 @@ public class Player : MonoBehaviour
     
     private bool CheckDeadZone(Vector2 touchPosition) => touchPosition.y < Screen.height - touchBounds && touchPosition.y > touchBounds;
     
-    private float GetRawTapDmg() => UnityEngine.Random.Range(playerStats.phyMINTapDmg, playerStats.phyMAXTapDmg);
-    
-    private bool IsCritPossible() => UnityEngine.Random.value <= playerStats.luckPhysicalCrit;
+    private bool IsCritPossible() => UnityEngine.Random.value <= PlayerStats.LuckPhysicalCrit;
 }

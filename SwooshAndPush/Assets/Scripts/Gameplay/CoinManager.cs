@@ -27,8 +27,8 @@ public class CoinManager : MonoBehaviour
 
     [Space]
     [Header("Animation settings")]
-    [SerializeField] [Range(0.5f, 0.9f)] float minAnimationDuration;
-    [SerializeField] [Range(0.9f, 2f)] float maxAnimationDuration;
+    [SerializeField] [Range(0.5f, 0.9f)] private float minAnimationDuration;
+    [SerializeField] [Range(0.9f, 2f)] private float maxAnimationDuration;
     [SerializeField] private Ease easeType;
     [SerializeField] private int coinsQuantityInAnimation;
     private Vector3 targetPosition;
@@ -49,16 +49,16 @@ public class CoinManager : MonoBehaviour
     {
         locationManager = GameObject.Find("Location Manager").GetComponent<LocationManager>();
         player = GameObject.Find("Input").GetComponent<Player>();
-        goldAmount = (player.playerLevel * locationManager.CurrentEnemy.MAXHealth) / goldAmountMultiplier;
+        goldAmount = (player.playerLevel * LocationManager.CurrentEnemy.MAXHealth) / goldAmountMultiplier;
         
     }
 
     void FixedUpdate()
     {
         // Updating gold and diamond currencies
-        goldAmountUIText.text = player.playerStats.goldCoins.ToString();
-        diamondAmountUIText.text = player.playerStats.diamonds.ToString();
-
+        goldAmountUIText.text = Player.PlayerStats.GoldCoins.ToString("0");
+        diamondAmountUIText.text = Player.PlayerStats.Diamonds.ToString();
+        
         #region Touch input
         
         // Detecting touch input for coins
@@ -96,7 +96,7 @@ public class CoinManager : MonoBehaviour
                     .SetEase(easeType)
                     .OnComplete(() => {
                         // when coins reaches target position
-                        player.playerStats.goldCoins += partOfWholeGoldAmount;
+                        Player.PlayerStats.GoldCoins += partOfWholeGoldAmount;
                         coin.SetActive(false);
                         coinsQueue.Enqueue(coin);
                     });
