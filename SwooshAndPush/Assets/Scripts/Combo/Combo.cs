@@ -21,7 +21,7 @@ public class Combo
             PlayerAction.SwipeLeft,
             PlayerAction.SwipeUp,
             PlayerAction.SwipeDown
-        },  ComboType.BloodOcean, playerStats.ComboBloodOceanDmg);
+        },  ComboType.BloodOcean, playerStats.ComboBloodOceanDmg.Value);
 
         var leftRightSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -29,7 +29,7 @@ public class Combo
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeLeft, 
             PlayerAction.SwipeRight
-        },  ComboType.LeftRightSlash, playerStats.ComboLeftRightSlashDmg);
+        },  ComboType.LeftRightSlash, playerStats.ComboLeftRightSlashDmg.Value);
 
         var upDownSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -37,7 +37,7 @@ public class Combo
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeUp, 
             PlayerAction.SwipeDown
-        },  ComboType.UpDownSlash, playerStats.ComboUpDownSlashDmg);
+        },  ComboType.UpDownSlash, playerStats.ComboUpDownSlashDmg.Value);
 
         var clockwiseSlash = Tuple.Create(new List<PlayerAction>
         {
@@ -45,7 +45,7 @@ public class Combo
             PlayerAction.SwipeRight, 
             PlayerAction.SwipeDown, 
             PlayerAction.SwipeLeft
-        },  ComboType.ClockwiseSlash, playerStats.ComboClockWiseSlashDmg);
+        },  ComboType.ClockwiseSlash, playerStats.ComboClockWiseSlashDmg.Value);
 
         //Adding Combos to comboList
         allCombos.Add(bloodOcean);

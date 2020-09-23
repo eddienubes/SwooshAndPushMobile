@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
 public enum ComboType
@@ -118,49 +117,59 @@ public enum ResistanceType
 [System.Serializable] public class PlayerStats
 {
     // Physical dmg(tap)
-    [JsonRequired] private float physicalMINTapDmg = 90.0f;
-    [JsonRequired] private float physicalMAXTapDmg = 150.0f;
-    [JsonIgnore] public float PhysicalTapDamage => UnityEngine.Random.Range(physicalMINTapDmg, physicalMAXTapDmg);
-
-    [JsonRequired] private float pureMINTapDmg = 20.0f;
-    [JsonRequired] private float pureMAXTapDmg = 50f;
-    [JsonIgnore] public float PureTapDmg 
-    {
-        set
-        {
-            pureMINTapDmg += value;
-            pureMAXTapDmg += value;
-        }
-        get => UnityEngine.Random.Range(pureMINTapDmg, pureMAXTapDmg);
-    }
+    [JsonRequired] private Stat physicalMINTapDmg = new Stat();
+    [JsonRequired] private Stat physicalMAXTapDmg = new Stat();
+    [JsonIgnore] public float PhysicalTapDamage => UnityEngine.Random.Range(physicalMINTapDmg.Value, physicalMAXTapDmg.Value);
     
+    // Pure Tap Damage
+    [JsonRequired] public Stat PureTapDmg = new Stat();
+
     // Luck
-    public float LuckPhysicalCrit { get; set; } = 0.1f;
+    [JsonRequired] public Stat LuckPhysicalCrit = new Stat();
     
     // Values of crit
-    [JsonRequired] private float critMultiplier = 0.10f;
+    [JsonRequired] public Stat CritMultiplier = new Stat();
+    
     [JsonIgnore] public float CritDamage 
     {
-        get => PhysicalTapDamage + PhysicalTapDamage * critMultiplier;
-        set => critMultiplier += value;
+        get => PhysicalTapDamage + PhysicalTapDamage * CritMultiplier.Value;
+        set => CritMultiplier.Value += value;
     }
 
     // Combo Damages
-    public float ComboBloodOceanDmg { get; set; } = 500.0f;
-    public float ComboLeftRightSlashDmg { get; set; } = 700.0f;
-    public float ComboUpDownSlashDmg { get; set; } = 200.0f;
-    public float ComboClockWiseSlashDmg { get; set; } = 1000.0f;
-
-    // Currencies
+    public Stat ComboBloodOceanDmg = new Stat();
+    public Stat ComboLeftRightSlashDmg = new Stat();
+    public Stat ComboUpDownSlashDmg = new Stat();
+    public Stat ComboClockWiseSlashDmg = new Stat();
+    
+    // Currencies    
     public float GoldCoins { get; set; } = 0;
-    public int Diamonds { get; set; } = 0;
-
+    public float Diamonds { get; set; } = 0;
+    
     // Player Level
     public int PlayerLevel { get; set; } = 1;
     
     public PlayerStats()
     {
+        // Assign of the default values when create new stats object(start of the new game)
+        // Physical Tap Damage
+        physicalMINTapDmg.Value = 90.0f;
+        physicalMAXTapDmg.Value = 150.0f;
         
+        // Pure Tap Damage
+        PureTapDmg.Value = 50f;
+        
+        // Luck
+        LuckPhysicalCrit.Value = 0.10f;
+        
+        // Values of crit
+        CritMultiplier.Value = 0.10f;
+        
+        // Combo Damages
+        ComboBloodOceanDmg.Value = 500f;
+        ComboLeftRightSlashDmg.Value = 700f;
+        ComboUpDownSlashDmg.Value = 200f;
+        ComboClockWiseSlashDmg.Value = 1000f;
     }
 
 }

@@ -188,5 +188,5 @@ public class Player : MonoBehaviour
     
     private bool CheckDeadZone(Vector2 touchPosition) => touchPosition.y < Screen.height - touchBounds && touchPosition.y > touchBounds;
     
-    private bool IsCritPossible() => UnityEngine.Random.value <= PlayerStats.LuckPhysicalCrit;
+    private bool IsCritPossible() => UnityEngine.Random.value <= PlayerStats.LuckPhysicalCrit.Value;
 }
