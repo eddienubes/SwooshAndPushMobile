@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public enum ComboType
 {
@@ -10,29 +12,26 @@ public enum ComboType
     ClockwiseSlash // Up->Right->Down->Left
 }
 
-public enum PlayerAction
-{
-    None,
-    Tap,
-    SwipeUp,
-    SwipeDown,
-    SwipeLeft,
-    SwipeRight
-}
-
-public enum StageType
-{
-    Casual,
-    Boss,
-    SuperBoss
-}
-
 public enum ResistanceType
 {
     Physical,
     Pure,
     Magical
 }
+
+public enum PlayerStatType
+{
+    PureTapDmg,
+    LuckPhysicalCrit,
+    CritMultiplier,
+    
+    ComboBloodOceanDmg,
+    ComboLeftRightSlashDmg,
+    ComboUpDownSlashDmg,
+    ComboClockWiseSlashDmg,
+    PlayerLevel
+}
+
 [System.Serializable] public class Location
 {
     public string Name { get; set; } = "Loren";
@@ -117,59 +116,106 @@ public enum ResistanceType
 [System.Serializable] public class PlayerStats
 {
     // Physical dmg(tap)
-    [JsonRequired] private Stat physicalMINTapDmg = new Stat();
-    [JsonRequired] private Stat physicalMAXTapDmg = new Stat();
-    [JsonIgnore] public float PhysicalTapDamage => UnityEngine.Random.Range(physicalMINTapDmg.Value, physicalMAXTapDmg.Value);
-    
-    // Pure Tap Damage
-    [JsonRequired] public Stat PureTapDmg = new Stat();
-
-    // Luck
-    [JsonRequired] public Stat LuckPhysicalCrit = new Stat();
+    [JsonRequired] private float physicalMINTapDmg;
+    [JsonRequired] private float physicalMAXTapDmg;
+    [JsonIgnore] public float PhysicalTapDamage
+    {
+        get => UnityEngine.Random.Range(physicalMINTapDmg, physicalMAXTapDmg);
+        set
+        {
+            physicalMINTapDmg += value;
+            physicalMAXTapDmg += value;
+        }
+    }
     
     // Values of crit
-    [JsonRequired] public Stat CritMultiplier = new Stat();
-    
-    [JsonIgnore] public float CritDamage 
-    {
-        get => PhysicalTapDamage + PhysicalTapDamage * CritMultiplier.Value;
-        set => CritMultiplier.Value += value;
-    }
+    [JsonIgnore] public float CritDamage => PhysicalTapDamage + PhysicalTapDamage * Stats[(int)PlayerStatType.CritMultiplier].Value;
 
-    // Combo Damages
-    public Stat ComboBloodOceanDmg = new Stat();
-    public Stat ComboLeftRightSlashDmg = new Stat();
-    public Stat ComboUpDownSlashDmg = new Stat();
-    public Stat ComboClockWiseSlashDmg = new Stat();
-    
     // Currencies    
-    public float GoldCoins { get; set; } = 0;
+    public float GoldCoins { get; set; } = 99999999999;
     public float Diamonds { get; set; } = 0;
     
-    // Player Level
-    public int PlayerLevel { get; set; } = 1;
+    // Stats list (Contains luck, crit, player level etc.)
+    // Described in the constructor.  
+    // Set of the list capacity according to the quantity of the player stats 
+    [JsonRequired] public Stat[] Stats = new Stat[Enum.GetNames(typeof(PlayerStatType)).Length];
     
     public PlayerStats()
     {
+        for (int i = 0; i < Enum.GetNames(typeof(PlayerStatType)).Length; i++)
+        {
+            Stats[i] = new Stat();
+        }
+        // Assign of the private vars used in calculations
+        // Physical Tap Damage
+        physicalMINTapDmg = 90f;
+        physicalMAXTapDmg = 150.0f;
+        
         // Assign of the default values when create new stats object(start of the new game)
         // Physical Tap Damage
-        physicalMINTapDmg.Value = 90.0f;
-        physicalMAXTapDmg.Value = 150.0f;
-        
-        // Pure Tap Damage
-        PureTapDmg.Value = 50f;
+        Stats[(int) PlayerStatType.PureTapDmg].Value = 50f;
         
         // Luck
-        LuckPhysicalCrit.Value = 0.10f;
+        Stats[(int) PlayerStatType.LuckPhysicalCrit].Value = 0.10f;
         
         // Values of crit
-        CritMultiplier.Value = 0.10f;
+        Stats[(int) PlayerStatType.CritMultiplier].Value = 0.10f;
         
         // Combo Damages
-        ComboBloodOceanDmg.Value = 500f;
-        ComboLeftRightSlashDmg.Value = 700f;
-        ComboUpDownSlashDmg.Value = 200f;
-        ComboClockWiseSlashDmg.Value = 1000f;
-    }
+        Stats[(int) PlayerStatType.ComboBloodOceanDmg].Value = 500f;
+        Stats[(int) PlayerStatType.ComboLeftRightSlashDmg].Value = 700f;
+        Stats[(int) PlayerStatType.ComboUpDownSlashDmg].Value = 200f;
+        Stats[(int) PlayerStatType.ComboClockWiseSlashDmg].Value = 1000f;
+        
+        // Player Level
+        Stats[(int) PlayerStatType.PlayerLevel].LevelScale = 15f;
+        
+        // I use exponential increasing for prices, damages, etc.
+        // So, in order to differentiate values I assign different scales for each of those
+        // Physical Tap 
+        Stats[(int) PlayerStatType.PureTapDmg].LevelScale = 15f;
+        Stats[(int) PlayerStatType.PureTapDmg].PriceScale = 15f;
+        
+        // Luck
+        Stats[(int) PlayerStatType.LuckPhysicalCrit].LevelScale = 15f;
+        Stats[(int) PlayerStatType.LuckPhysicalCrit].PriceScale = 15f;
 
+        // Values of crit
+        Stats[(int) PlayerStatType.CritMultiplier].LevelScale = 15f;
+        Stats[(int) PlayerStatType.CritMultiplier].PriceScale = 15f;
+
+        // Combo Damages
+        Stats[(int) PlayerStatType.ComboBloodOceanDmg].LevelScale = 15f;
+        Stats[(int) PlayerStatType.ComboLeftRightSlashDmg].LevelScale = 15f;
+        Stats[(int) PlayerStatType.ComboUpDownSlashDmg].LevelScale = 15f;
+        Stats[(int) PlayerStatType.ComboClockWiseSlashDmg].LevelScale = 15f;
+        
+        Stats[(int) PlayerStatType.ComboBloodOceanDmg].PriceScale = 15f;
+        Stats[(int) PlayerStatType.ComboLeftRightSlashDmg].PriceScale = 15f;
+        Stats[(int) PlayerStatType.ComboUpDownSlashDmg].PriceScale = 15f;
+        Stats[(int) PlayerStatType.ComboClockWiseSlashDmg].PriceScale = 15f;
+        
+        // Player Level
+        Stats[(int) PlayerStatType.PlayerLevel].PriceScale = 15f;
+        Stats[(int) PlayerStatType.PlayerLevel].LevelScale = 1;
+
+        // Set of the default prices
+        // Physical Tap Damage
+        Stats[(int) PlayerStatType.PureTapDmg].Price = 150;
+        
+        // Luck
+        Stats[(int) PlayerStatType.LuckPhysicalCrit].Price = 150;
+        
+        // Values of crit
+        Stats[(int) PlayerStatType.CritMultiplier].Price = 150;
+        
+        // Combo Damages
+        Stats[(int) PlayerStatType.ComboBloodOceanDmg].Price = 150;
+        Stats[(int) PlayerStatType.ComboLeftRightSlashDmg].Price = 150;
+        Stats[(int) PlayerStatType.ComboUpDownSlashDmg].Price = 150;
+        Stats[(int) PlayerStatType.ComboClockWiseSlashDmg].Price = 150;
+        
+        // Player Level
+        Stats[(int) PlayerStatType.PlayerLevel].Price = 150;
+    }
 }

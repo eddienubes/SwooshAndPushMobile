@@ -2,6 +2,14 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
+public enum StageType
+{
+    Casual,
+    Boss,
+    SuperBoss
+}
+
 public class LocationManager : MonoBehaviour
 {
     public static Enemy CurrentEnemy;

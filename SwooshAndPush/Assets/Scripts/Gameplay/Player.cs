@@ -1,6 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
+public enum PlayerAction
+{
+    None,
+    Tap,
+    SwipeUp,
+    SwipeDown,
+    SwipeLeft,
+    SwipeRight
+}
+
 public class Player : MonoBehaviour
 {
     // Values
@@ -26,12 +36,16 @@ public class Player : MonoBehaviour
     // Data vars
     public static PlayerStats PlayerStats;
 
-    private void Start()
+    private void Awake()
     {
         SaveSystem.LoadPlayer();
+    }
+
+    private void Start()
+    {
         combo = new Combo(PlayerStats);
-        touchBounds = (float)(Screen.height * 0.15); // 0.15 - 300 pixels of standart 1080 x 1920 mobile screen size
-        playerLevel = PlayerStats.PlayerLevel;
+        touchBounds = (float)(Screen.height * 0.15); // 0.15 - 300 pixels of standard 1080 x 1920 mobile screen size
+        playerLevel = (int)PlayerStats.Stats[(int)PlayerStatType.PlayerLevel].Value;
     }
 
     private void Update()
@@ -185,8 +199,7 @@ public class Player : MonoBehaviour
         if (!IsComboAvailable())
             combo.ResetCombo();
     }
-    
     private bool CheckDeadZone(Vector2 touchPosition) => touchPosition.y < Screen.height - touchBounds && touchPosition.y > touchBounds;
     
-    private bool IsCritPossible() => UnityEngine.Random.value <= PlayerStats.LuckPhysicalCrit.Value;
+    private bool IsCritPossible() => UnityEngine.Random.value <= PlayerStats.Stats[(int)PlayerStatType.LuckPhysicalCrit].Value;
 }
