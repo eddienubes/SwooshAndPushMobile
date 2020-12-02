@@ -21,7 +21,7 @@ public class UpgradeContainer : MonoBehaviour
         
     private void Update()
     {
-        Debug.Log(Player.PlayerStats.PhysicalTapDamage);
+        // Debug.Log(Player.PlayerStats.PhysicalTapDamage);
     }
     
     private void UpdateText()

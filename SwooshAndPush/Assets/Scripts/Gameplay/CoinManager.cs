@@ -62,17 +62,20 @@ public class CoinManager : MonoBehaviour
         #region Touch input
         
         // Detecting touch input for coins
-        if (Input.touchCount <= 0 || Input.touches[0].phase != TouchPhase.Began) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        // if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+        // {
+        //     Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
+        //     RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        //
+        //     if (hit.collider == null) return;
+        //
+        //     if (hit.collider.gameObject.CompareTag("coin"))
+        //     {
+        //         IncreaseGoldAndDestroyCoin(hit.collider.gameObject);
+        //         Debug.Log("COIN HIT!");
+        //     }
+        // }
 
-        if (hit.collider == null) return;
-        
-        if (hit.collider.gameObject.CompareTag("coin"))
-        {
-            IncreaseGoldAndDestroyCoin(hit.collider.gameObject);
-        }
-        
         #endregion
     }
 
@@ -82,7 +85,7 @@ public class CoinManager : MonoBehaviour
         float partOfWholeGoldAmount = goldAmount / amountOfCoinPrefsInAnimation;
         for (int i = 0; i < amountOfCoinPrefsInAnimation; i++)
         {
-            // Check if there is coins in the queue
+            // Check if there are coins in the queue
             if (coinsQueue.Count > 0)
             {
                 // Dequeue coin and animate it
@@ -122,16 +125,6 @@ public class CoinManager : MonoBehaviour
         }
     }
 
-    public IEnumerator CountDownToDestroy(GameObject coin)
-    {
-        int countDown = CoinLifeInSeconds;
-        while (countDown > 0)
-        {
-            yield return new WaitForSeconds(1);
-            countDown--;
-        }
-        IncreaseGoldAndDestroyCoin(coin);
-    }
 
     public void SpawnCoins(int amount)
     {

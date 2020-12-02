@@ -1,14 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UtilizeCoin : MonoBehaviour
+public class Coin : MonoBehaviour
 {
     private CoinManager coinManager;
-
+    
     private void Awake()
     {
         coinManager = GameObject.Find("Location Manager").GetComponent<CoinManager>();
-        StartCoroutine(coinManager.CountDownToDestroy(gameObject));
+    }
+
+    private void Update()
+    {
+        
+    }
+
+    private void OnMouseDown()
+    {
+        Debug.Log("TAPPED"); // TODO 
     }
 }

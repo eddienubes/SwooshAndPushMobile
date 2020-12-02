@@ -27,7 +27,7 @@ public static class SaveSystem
             Player.PlayerStats = new PlayerStats();
             LocationManager.CurrentLocation = new Location();
 
-            // PlayerPrefs.SetInt("FIRSTLAUNCH", 0);99999999999
+            PlayerPrefs.SetInt("FIRSTLAUNCH", 0);
             SavePlayer();
         }
         else
