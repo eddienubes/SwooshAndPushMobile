@@ -17,14 +17,12 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private LocationManager locationManager;
     [SerializeField] private Text goldAmountUIText;
     [SerializeField] private Text diamondAmountUIText;
-
-
-
+    
     [Space]
     [Header("Available coin : (coins to pool)")]
     [SerializeField] private int coinQuantity;
     private readonly Queue<GameObject> coinsQueue = new Queue<GameObject>();
-
+    
     [Space]
     [Header("Animation settings")]
     [SerializeField] [Range(0.5f, 0.9f)] private float minAnimationDuration;
@@ -32,7 +30,7 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private Ease easeType;
     [SerializeField] private int coinsQuantityInAnimation;
     private Vector3 targetPosition;
-
+    
     [Space]
     [Header("Values")]
     [SerializeField] private float goldAmount;
@@ -44,7 +42,7 @@ public class CoinManager : MonoBehaviour
         targetPosition = Camera.main.ScreenToWorldPoint(targetForCoinAnimation.position);
         PrepareCoin();
     }
-
+    
     private void Start()
     {
         locationManager = GameObject.Find("Location Manager").GetComponent<LocationManager>();
@@ -75,7 +73,7 @@ public class CoinManager : MonoBehaviour
         //         Debug.Log("COIN HIT!");
         //     }
         // }
-
+        
         #endregion
     }
 
